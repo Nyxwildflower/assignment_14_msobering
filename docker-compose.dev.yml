@@ -1,0 +1,15 @@
+version: "3.8"
+
+services:
+  app:
+    container_name: sobering_madison_coding_assignment14
+    image: app-dev
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./src:/app/src
+    environment:
+      - WATCHPACK_POLLING=true
+    ports:
+      - "5575:3000"

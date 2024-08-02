@@ -1,0 +1,11 @@
+version: "3.8"
+
+services:
+  app:
+    container_name: sobering_madison_coding_assignment14
+    image: app-prod
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    ports:
+      - "5575:80"
