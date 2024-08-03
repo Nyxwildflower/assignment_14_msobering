@@ -29,6 +29,10 @@
     "format": "npx prettier --check 'src/**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc",
     "format:fix": "prettier --write 'src/**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc"
   },
+  "lint-staged": {
+    "src/**/*.{js,jsx,ts,tsx,json}": "eslint --fix",
+    "src/**/*.{js,jsx,ts,tsx,css,md,json}": "prettier --write"
+  },
   "eslintConfig": {
     "extends": [
       "react-app",
@@ -59,6 +63,7 @@
     "eslint-plugin-react": "^7.35.0",
     "eslint-plugin-react-hooks": "^4.6.2",
     "globals": "^15.9.0",
+    "lint-staged": "^15.2.7",
     "prettier": "^3.3.3",
     "typescript-eslint": "^8.0.0"
   }
