@@ -29,7 +29,8 @@
     "camelcase": "error",
     "spaced-comment": "error",
     "quotes": ["error", "double"],
-    "no-duplicate-imports": "error"
+    "no-duplicate-imports": "error",
+    "react/no-unknown-property": ["error", { "ignore": ["netlify"] }]
   },
   "settings": {
     "import/resolver": {
