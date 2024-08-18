@@ -1,34 +1,54 @@
-import { ArrowRightIcon } from "@heroicons/react/solid";
-import React from "react";
+import { ArrowRightIcon, MenuIcon } from "@heroicons/react/solid";
+import { React, useState } from "react";
 
 export default function Navbar() {
+  const [menuOpen, setMenuOpen] = useState(false);
+
   return (
     <header className="bg-gray-800 md:sticky top-0 z-10">
-      <div className="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
-        <a
-          href="#about"
-          className="title-font font-medium text-white mb-4 md:mb-0"
+      <div className="container md:flex md:justify-stretch mx-auto p-5">
+        <div className="flex justify-between md:justify-self-start">
+          <a
+            href="#about"
+            className="title-font font-medium text-white md:w-max md:mt-2"
+          >
+            <h1 className="ml-3 text-xl">Madison Sobering</h1>
+          </a>
+          <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden">
+            <MenuIcon className="w-7 h-7" />
+          </button>
+        </div>
+        <div
+          className={`md:flex md:block md:w-full ${menuOpen ? "block" : "hidden"}`}
         >
-          <h1 className="ml-3 text-xl">Madison Sobering</h1>
-        </a>
-        <nav className="md:mr-auto md:ml-4 md:py-1 md:pl-4 md:border-l md:border-gray-700	flex flex-wrap items-center text-base justify-center">
-          <a href="#work" className="mr-5 hover:text-white">
-            Past Work
+          <nav className="flex flex-wrap md:mr-auto md:ml-4 md:mt-1 md:pl-4 md:border-l md:border-gray-700 text-base">
+            <a
+              href="#work"
+              className="w-full md:w-auto md:mr-5 my-2 text-center hover:text-white"
+            >
+              Past Work
+            </a>
+            <a
+              href="#skills"
+              className="w-full md:w-auto md:mr-5 my-2 text-center hover:text-white"
+            >
+              Skills
+            </a>
+            <a
+              href="#dev"
+              className="w-full md:w-auto md:mr-5 my-2 text-center hover:text-white"
+            >
+              Dev Setup
+            </a>
+          </nav>
+          <a
+            href="#resources"
+            className="flex w-full md:w-auto justify-center items-center border-0 px-3 focus:outline-none hover:bg-gray-700 rounded text-base mt-2 md:mt-0 md:mt-0"
+          >
+            Hire Me
+            <ArrowRightIcon className="w-4 h-4 ml-1" />
           </a>
-          <a href="#skills" className="mr-5 hover:text-white">
-            Skills
-          </a>
-          <a href="#dev" className="mr-5 hover:text-white">
-            Dev Setup
-          </a>
-        </nav>
-        <a
-          href="#resources"
-          className="inline-flex items-center bg-gray-800 border-0 py-1 px-3 focus:outline-none hover:bg-gray-700 rounded text-base mt-4 md:mt-0"
-        >
-          Hire Me
-          <ArrowRightIcon className="w-4 h-4 ml-1" />
-        </a>
+        </div>
       </div>
     </header>
   );
