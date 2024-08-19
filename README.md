@@ -77,7 +77,7 @@ To find and fix errors:
 npm run format:fix
 ```
 
-### Component Tests
+### App Tests
 
 ```
 npm run test
