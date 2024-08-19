@@ -1,15 +1,49 @@
 import { MailIcon, PhoneIcon } from "@heroicons/react/solid";
-import React from "react";
+import { React, useState, useEffect } from "react";
 import { resources } from "../data";
 
 export default function Resources() {
-  const [name, setName] = React.useState("");
-  const [email, setEmail] = React.useState("");
-  const [message, setMessage] = React.useState("");
+  const initialValues = { name: "", email: "", message: "" };
+  const [formValues, setFormValues] = useState(initialValues);
+  const [formErrors, setFormErrors] = useState({});
+  const [isSubmit, setIsSubmit] = useState(false);
+  const [submitMessage, setSubmitMessage] = useState("");
 
-  // function validate(input) {
+  const validate = (values) => {
+    const errors = {};
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
 
-  // }
+    setFormValues({
+      name: values.name.trim(),
+      email: values.email.trim(),
+      message: values.message.trim(),
+    });
+
+    if (!values.name) {
+      errors.name = "Name is required";
+    } else if (values.name.length > 50) {
+      errors.name = "Please leave a shorter name.";
+    }
+
+    if (!values.email) {
+      errors.email = "Email is required";
+    } else if (!regex.test(values.email)) {
+      errors.email = "Please enter a valid email.";
+    }
+
+    if (!values.message) {
+      errors.message = "Message is required";
+    } else if (values.message.length > 500) {
+      errors.message = "Please leave a message less than 500 characters.";
+    }
+
+    return errors;
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormValues({ ...formValues, [name]: value });
+  };
 
   function encode(data) {
     return Object.keys(data)
@@ -19,16 +53,32 @@ export default function Resources() {
       .join("&");
   }
 
-  function handleSubmit(e) {
+  const handleSubmit = (e) => {
+    setSubmitMessage("");
     e.preventDefault();
-    fetch("/", {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: encode({ "form-name": "contact", name, email, message }),
-    })
-      .then(() => alert("Message sent!"))
-      .catch((error) => alert(error));
-  }
+    setFormErrors(validate(formValues));
+    setIsSubmit(true);
+  };
+
+  useEffect(() => {
+    if (Object.keys(formErrors).length === 0 && isSubmit) {
+      console.log(formValues);
+      const name = formValues.name;
+      const email = formValues.email;
+      const message = formValues.message;
+
+      fetch("/", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: encode({ "form-name": "contact", name, email, message }),
+      })
+        .then(() => {
+          setSubmitMessage("Information Submitted!");
+          setFormValues({ name: "", email: "", message: "" });
+        })
+        .catch((error) => alert(error));
+    }
+  }, [formErrors]);
 
   return (
     <section id="resources" className="relative">
@@ -105,8 +155,10 @@ export default function Resources() {
               id="name"
               name="name"
               className="w-full bg-gray-800 rounded border border-gray-700 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-900 text-base outline-none text-gray-100 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out invalid:border-pink-500 invalid:text-pink-600 focus:invalid:border-pink-500 focus:invalid:ring-pink-500"
-              onChange={(e) => setName(e.target.value)}
+              value={formValues.name}
+              onChange={handleChange}
             />
+            <p className="text-red-400">{formErrors.name}</p>
           </div>
           <div className="relative mb-4">
             <label htmlFor="email" className="leading-7 text-sm text-gray-400">
@@ -117,8 +169,10 @@ export default function Resources() {
               id="email"
               name="email"
               className="w-full bg-gray-800 rounded border border-gray-700 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-900 text-base outline-none text-gray-100 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out invalid:border-pink-500 invalid:text-pink-600 focus:invalid:border-pink-500 focus:invalid:ring-pink-500"
-              onChange={(e) => setEmail(e.target.value)}
+              value={formValues.email}
+              onChange={handleChange}
             />
+            <p className="text-red-400">{formErrors.email}</p>
           </div>
           <div className="relative mb-4">
             <label
@@ -131,8 +185,10 @@ export default function Resources() {
               id="message"
               name="message"
               className="w-full bg-gray-800 rounded border border-gray-700 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-900 h-32 text-base outline-none text-gray-100 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out invalid:border-pink-500 invalid:text-pink-600 focus:invalid:border-pink-500 focus:invalid:ring-pink-500"
-              onChange={(e) => setMessage(e.target.value)}
+              value={formValues.message}
+              onChange={handleChange}
             />
+            <p className="text-red-400">{formErrors.message}</p>
           </div>
           <button
             type="submit"
@@ -140,6 +196,7 @@ export default function Resources() {
           >
             Submit
           </button>
+          <p className="mt-3 text-lg text-green-300">{submitMessage}</p>
         </form>
       </div>
     </section>
